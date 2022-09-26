@@ -1,19 +1,23 @@
+import java.util.List;
 import java.util.ArrayList;
 
-public class Train {
-    private int trainId;
-    private ArrayList<TrainCar> trainCarsInTrain;
-    private ArrayList<Locomotive> locomotivesInTrain;
+public class Train extends Vehicle {
+    // private int trainId;
+    // private ArrayList<TrainCar> trainCarsInTrain;
+    // private ArrayList<Locomotive> locomotivesInTrain;
+    private final List<Vehicle> composition;
     private int maxTrainCarsTrainCanPull;
     private double maxWeightTrainCanPull;
 
     /**
      * It constructs a new train with a specified ID
      */
-    public Train(int trainId) {
-        this.trainId = trainId;
-        trainCarsInTrain = new ArrayList<>(); // It stores train cars.
-        locomotivesInTrain = new ArrayList<>(); // It stores locomotives.
+    public Train(int id) {
+        super(id);
+        composition = new Arraylist<>();
+        // this.trainId = trainId;
+        // trainCarsInTrain = new ArrayList<>(); // It stores train cars.
+        // locomotivesInTrain = new ArrayList<>(); // It stores locomotives.
         maxTrainCarsTrainCanPull = 0;
         maxWeightTrainCanPull = 0;
     }
