@@ -1,24 +1,21 @@
-public class Locomotive {
-    private int locomotiveId;
+public class Locomotive extends Vehicle{
+    // private int locomotiveId;
     private double maxWeight;
     private int maxQuantityTrainCar;
     
     /**
      * It constructs a new locomotive with a specified ID, max weight (tons), and how many train cars it supports.
      */
-    public Locomotive(int locomotiveId, double maxWeight, int maxQuantityTrainCar) {
-        this.locomotiveId = locomotiveId;
+    public Locomotive(int id, double maxWeight, int maxQuantityTrainCar) {
+        super(id);
         this.maxWeight = maxWeight;
         this.maxQuantityTrainCar = maxQuantityTrainCar;
     }
 
-    /**
-     * It gets the locomotive ID.
-     * @return the locomotive ID
-     */
-    public int getLocomotiveId() {
-        return locomotiveId;
-    }
+//    /**
+//     * It gets the locomotive ID.
+//     * @return the locomotive ID
+//     */
 
     /**
      * It gets the max weight a locomotive can pull.
@@ -39,7 +36,7 @@ public class Locomotive {
 
     @Override
     public String toString() {
-        return "Locomotive [ID = " + locomotiveId + ", max quantity train car = " + maxQuantityTrainCar +
+        return "Locomotive [ID = " + getId() + ", max quantity train car = " + maxQuantityTrainCar +
                 ", max weight = " + maxWeight + "]";
     }
 }

@@ -26,7 +26,7 @@ public class LocomotiveGarage {
     public boolean isThereLocomotiveInGarage(int locomotiveId) {
         boolean flag = false;
         for (int i = 0; i < locomotiveGarage.size(); i++) {
-            if (locomotiveId == locomotiveGarage.get(i).getLocomotiveId()) {
+            if (locomotiveId == locomotiveGarage.get(i).getId()) {
                 flag = true;
                 break;
             }
@@ -42,7 +42,7 @@ public class LocomotiveGarage {
     public Locomotive getLocomotiveFromId(int locomotiveId) {
         Locomotive locomotiveToBeReturned = null;
         for (int i = 0; i < locomotiveGarage.size(); i++) {
-            if (locomotiveGarage.get(i).getLocomotiveId() == locomotiveId) {
+            if (locomotiveGarage.get(i).getId() == locomotiveId) {
                 locomotiveToBeReturned = locomotiveGarage.get(i);
             }
         }
@@ -55,7 +55,7 @@ public class LocomotiveGarage {
      */
     public void moveLocomotiveFromGarageToTrain(int locomotiveId) {
         for (int i = 0; i < locomotiveGarage.size(); i++) {
-            if (locomotiveGarage.get(i).getLocomotiveId() == locomotiveId) {
+            if (locomotiveGarage.get(i).getId() == locomotiveId) {
                 locomotiveGarage.remove(i);
             }
         }

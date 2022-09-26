@@ -26,7 +26,7 @@ public class TrainCarGarage {
     public boolean isThereTrainCarInGarage(int trainCarId) {
         boolean flag = false;
         for (int i = 0; i < trainCarGarage.size(); i++) {
-            if (trainCarId == trainCarGarage.get(i).getTrainCarId()) {
+            if (trainCarId == trainCarGarage.get(i).getId()) {
                 flag = true;
                 break;
             }
@@ -40,7 +40,7 @@ public class TrainCarGarage {
      */
     public void moveTrainCarFromGarageToTrain(int trainCarId) {
         for (int i = 0; i < trainCarGarage.size(); i++) {
-            if (trainCarGarage.get(i).getTrainCarId() == trainCarId) {
+            if (trainCarGarage.get(i).getId() == trainCarId) {
                 trainCarGarage.remove(i);
             }
         }
@@ -54,7 +54,7 @@ public class TrainCarGarage {
     public TrainCar getTrainCarFromId(int trainCarId) {
         TrainCar trainCarToBeReturned = null;
         for (int i = 0; i < trainCarGarage.size(); i++) {
-            if (trainCarGarage.get(i).getTrainCarId() == trainCarId) {
+            if (trainCarGarage.get(i).getId() == trainCarId) {
                 trainCarToBeReturned = trainCarGarage.get(i);
             }
         }
