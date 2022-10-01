@@ -1,8 +1,8 @@
 import java.util.List;
 import java.util.ArrayList;
 
-public class Train extends Vehicle {
-    // private int trainId;
+public class Train {
+    private int id;
     // private ArrayList<TrainCar> trainCarsInTrain;
     // private ArrayList<Locomotive> locomotivesInTrain;
     private final List<Vehicle> composition;
@@ -13,9 +13,8 @@ public class Train extends Vehicle {
      * It constructs a new train with a specified ID
      */
     public Train(int id) {
-        super(id);
-        composition = new Arraylist<>();
-        // this.trainId = trainId;
+        composition = new ArrayList<>();
+        this.id = id;
         // trainCarsInTrain = new ArrayList<>(); // It stores train cars.
         // locomotivesInTrain = new ArrayList<>(); // It stores locomotives.
         maxTrainCarsTrainCanPull = 0;
@@ -27,7 +26,7 @@ public class Train extends Vehicle {
      * @return the train ID
      */
     public int getTrainId() {
-        return trainId;
+        return id;
     }
 
     /**
@@ -36,8 +35,9 @@ public class Train extends Vehicle {
      */
     public int getLocomotiveQuantity() {
         int counter = 0;
-        for (Locomotive locomotives : locomotivesInTrain) {
-            counter++;
+        for (Vehicle vehicle : composition) {
+            if (vehicle instanceof Locomotive)
+                counter++;
         }
         return counter;
     }
@@ -48,8 +48,9 @@ public class Train extends Vehicle {
      */
     public int getTrainCarQuantity() {
         int counter = 0;
-        for (TrainCar trainCar : trainCarsInTrain) {
-            counter++;
+        for (Vehicle vehicle : composition) {
+            if (vehicle instanceof TrainCar)
+                counter++;
         }
         return counter;
     }
@@ -60,15 +61,19 @@ public class Train extends Vehicle {
      * @return true if you can attach the locomotive; false if you can't
      */
     public boolean attachLocomotive(Locomotive locomotive) {
-        if (locomotivesInTrain.size() == 0) {
-            locomotivesInTrain.add(locomotive);
-            maxWeightTrainCanPull = locomotive.getMaxWeight();
-            maxTrainCarsTrainCanPull = locomotive.getMaxQuantityTrainCar();
-            return true;
+        if (getTrainCarQuantity() == 0) {
+            if (getLocomotiveQuantity() == 0) {
+                composition.add(locomotive);
+                maxWeightTrainCanPull = locomotive.getMaxWeight();
+                maxTrainCarsTrainCanPull = locomotive.getMaxQuantityTrainCar();
+                return true;
+            } else {
+                composition.add(locomotive);
+                setMaxWeightTrainCanPull();
+                return true;
+            }
         } else {
-            locomotivesInTrain.add(locomotive);
-            setMaxWeightTrainCanPull();
-            return true;
+            return false;
         }
     }
 
@@ -79,13 +84,14 @@ public class Train extends Vehicle {
      */
     public boolean attachTrainCar(TrainCar trainCar) {
         double maxWeight = 0.0;
-        for (TrainCar trainCars : trainCarsInTrain) {
-            maxWeight += trainCars.getLoadCapacity();
+        for (Vehicle vehicle : composition) {
+            if (vehicle instanceof TrainCar vehicleTrainCar)
+            maxWeight += vehicleTrainCar.getLoadCapacity();
         }
         maxWeight += trainCar.getLoadCapacity();
 
-        if (trainCarsInTrain.size() < maxTrainCarsTrainCanPull && !(maxWeight > maxWeightTrainCanPull)) {
-            trainCarsInTrain.add(trainCar);
+        if (getTrainCarQuantity() < maxTrainCarsTrainCanPull && !(maxWeight > maxWeightTrainCanPull)) {
+            composition.add(trainCar);
             return true;
         } else {
             return false;
@@ -97,11 +103,15 @@ public class Train extends Vehicle {
      * @return true if you can detach the locomotive; false if you can't
      */
     public boolean detachLocomotive() {
-        if (locomotivesInTrain.size() == 0) {
-            return false;
+        if (getTrainCarQuantity() == 0) {
+            if (getTrainCarQuantity() == 0) {
+                return false;
+            } else {
+                composition.remove(composition.size() - 1);
+                return true;
+            }
         } else {
-            locomotivesInTrain.remove(locomotivesInTrain.size() - 1);
-            return true;
+         return false;
         }
     }
 
@@ -110,10 +120,10 @@ public class Train extends Vehicle {
      * @return true if you can't detach; false if you can't
      */
     public boolean detachTrainCar() {
-        if (trainCarsInTrain.size() == 0) {
+        if (getTrainCarQuantity() == 0) {
             return false;
         } else {
-            trainCarsInTrain.remove(trainCarsInTrain.size() - 1);
+            composition.remove(composition.size() - 1);
             return true;
         }
     }
@@ -124,8 +134,11 @@ public class Train extends Vehicle {
      * @return the locomotive
      */
     public Locomotive getLastLocomotiveFromTrain(Train train) {
-        Locomotive locomotive = locomotivesInTrain.get(locomotivesInTrain.size() - 1);
-        return locomotive;
+        Vehicle vehicle = composition.get(getLocomotiveQuantity() - 1);
+        if (vehicle instanceof Locomotive locomotive)
+            return locomotive;
+        else
+            return null;
     }
 
     /** It gets the last train car attached to a train.
@@ -133,7 +146,13 @@ public class Train extends Vehicle {
      * @return the train car
      */
     public TrainCar getLastTrainCarFromTrain(Train train) {
-        TrainCar trainCar = trainCarsInTrain.get(trainCarsInTrain.size() - 1);
+        TrainCar trainCar = null;
+
+        for (Vehicle vehicle: composition){
+            if (vehicle instanceof TrainCar)
+                trainCar = (TrainCar) vehicle;
+        }
+
         return trainCar;
     }
 
@@ -144,9 +163,11 @@ public class Train extends Vehicle {
         double weight = 0;
         int trainCars = 0;
         double tx = 0.9;
-        for (Locomotive locomotives : locomotivesInTrain) {
-            weight += locomotives.getMaxWeight();
-            trainCars += locomotives.getMaxQuantityTrainCar();
+        for (Vehicle vehicle : composition) {
+            if (composition instanceof Locomotive locomotive) {
+                weight += locomotive.getMaxWeight();
+                trainCars += locomotive.getMaxQuantityTrainCar();
+            }
         }
         maxWeightTrainCanPull = weight * tx;
         maxTrainCarsTrainCanPull = trainCars - (10 * trainCars / 100);
@@ -154,7 +175,7 @@ public class Train extends Vehicle {
 
     @Override
     public String toString() {
-        return "Train [ID = " + trainId + "]\n" + locomotivesInTrain + "\n" + trainCarsInTrain + "\n\nThis train " +
+        return "Train [ID = " + id + "]\n" + composition  + "\n\nThis train " +
                 "can pull " + maxTrainCarsTrainCanPull + " train cars and " + maxWeightTrainCanPull + " tons.";
     }
 }
