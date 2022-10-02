@@ -4,20 +4,35 @@ import java.util.List;
 public class Garage {
 
     private final List<Vehicle> vehicles;
+    private final List<Train> trains;
 
     /**
      * It constructs a new garage.
      */
     public Garage() {
         vehicles = new ArrayList<>();
+        trains = new ArrayList<>();
     }
 
     /**
-     * Add a vehicle to the garage.
+     * It adds a vehicle to the garage.
      * @param vehicle the vehicle to be added
      */
     public void addVehicle(Vehicle vehicle) {
         vehicles.add(vehicle);
+    }
+
+    public void addTrain(Train t) {
+        trains.add(t);
+    }
+
+    public boolean hasTrain(int id) {
+        for (Train t : trains) {
+            if (t.getId() == id) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -26,7 +41,7 @@ public class Garage {
      * @return true if there's the specific vehicle; false if there isn't
      */
     public boolean hasVehicleInGarage(int id) {
-        for (Vehicle vehicle: vehicles) {
+        for (Vehicle vehicle : vehicles) {
             if (vehicle.getId() == id) {
                 return true;
             }
@@ -40,7 +55,7 @@ public class Garage {
      * @return the vehicle instance
      */
     public Vehicle getById(int id) {
-        for (Vehicle vehicle: vehicles) {
+        for (Vehicle vehicle : vehicles) {
             if (vehicle.getId() == id) {
                 return vehicle;
             }
@@ -48,9 +63,18 @@ public class Garage {
         return null;
     }
 
+    public Train getTrainById(int id) {
+        for (Train t : trains) {
+            if (t.getId() == id) {
+                return t;
+            }
+        }
+        return null;
+    }
+
     /**
-     * It selects a vehicle to be attached to train.
-     * @param id the vehicle to be moved
+     * It removes a vehicle from garage.
+     * @param id the vehicle to be removed
      */
     public Vehicle removeFromGarage(int id) {
         Vehicle vehicle = getById(id);
@@ -59,6 +83,45 @@ public class Garage {
             return vehicle;
         }
         return null;
+    }
+
+    public Train removeTrain(int id) {
+        Train t = getTrainById(id);
+        if (t != null) {
+            trains.remove(t);
+            return t;
+        }
+        return null;
+    }
+
+    public String listTrains() {
+        String aux = "Trains in yard:\n\n";
+        for (Train t : trains) {
+            aux += t.toString() + "\n";
+        }
+        return aux;
+    }
+
+    public String listLocomotives() {
+        String aux = "Locomotives in garage:\n\n";
+        for (Vehicle v : vehicles) {
+            if (v instanceof Locomotive) {
+                Locomotive l = (Locomotive) v;
+                aux += l.toString() + "\n";
+            }
+        }
+        return aux;
+    }
+
+    public String listTrainCars() {
+        String aux = "Train cars in garage:\n\n";
+        for (Vehicle v : vehicles) {
+            if (v instanceof TrainCar) {
+                TrainCar tc = (TrainCar) v;
+                aux += tc.toString() + "\n";
+            }
+        }
+        return aux;
     }
 
     @Override

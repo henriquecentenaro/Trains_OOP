@@ -12,11 +12,6 @@ public class Locomotive extends Vehicle{
         this.maxQuantityTrainCar = maxQuantityTrainCar;
     }
 
-//    /**
-//     * It gets the locomotive ID.
-//     * @return the locomotive ID
-//     */
-
     /**
      * It gets the max weight a locomotive can pull.
      * @return the max weight

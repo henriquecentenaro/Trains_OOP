@@ -1,5 +1,4 @@
 public class TrainCar extends Vehicle{
-    // private int trainCarId;
     private double loadCapacity;
     private Train train;
     
@@ -10,14 +9,6 @@ public class TrainCar extends Vehicle{
         super(id);
         this.loadCapacity = loadCapacity;
     }
-
-//    /**
-//     * It gets the train car ID.
-//     * @return the train car ID
-//     */
-//    public int getTrainCarId() {
-//        return trainCarId;
-//    }
 
     /**
      * It gets the load capacity of a train car.

@@ -2,158 +2,75 @@ import java.util.List;
 import java.util.ArrayList;
 
 public class Train {
+    private List<Vehicle> composition;
     private int id;
-    // private ArrayList<TrainCar> trainCarsInTrain;
-    // private ArrayList<Locomotive> locomotivesInTrain;
-    private final List<Vehicle> composition;
     private int maxTrainCarsTrainCanPull;
     private double maxWeightTrainCanPull;
 
-    /**
-     * It constructs a new train with a specified ID
-     */
     public Train(int id) {
-        composition = new ArrayList<>();
         this.id = id;
-        // trainCarsInTrain = new ArrayList<>(); // It stores train cars.
-        // locomotivesInTrain = new ArrayList<>(); // It stores locomotives.
+        composition = new ArrayList<>();
         maxTrainCarsTrainCanPull = 0;
         maxWeightTrainCanPull = 0;
     }
 
-    /**
-     * It gets the train ID.
-     * @return the train ID
-     */
-    public int getTrainId() {
+    public int getId() {
         return id;
     }
 
-    /**
-     * It gets how many locomotives are attached to a train.
-     * @return the quantity of locomotives
-     */
-    public int getLocomotiveQuantity() {
-        int counter = 0;
-        for (Vehicle vehicle : composition) {
-            if (vehicle instanceof Locomotive)
-                counter++;
+    public boolean addLocomotive(Vehicle v) {
+        for (Vehicle aux : composition) {
+            if (aux instanceof TrainCar)
+                return false;
         }
-        return counter;
-    }
 
-    /**
-     * It gets how many train cars are attached to a train.
-     * @return the quantity of train cars
-     */
-    public int getTrainCarQuantity() {
-        int counter = 0;
-        for (Vehicle vehicle : composition) {
-            if (vehicle instanceof TrainCar)
-                counter++;
-        }
-        return counter;
-    }
-
-    /**
-     * It attaches a locomotive to a train.
-     * @param locomotive the locomotive to be attached
-     * @return true if you can attach the locomotive; false if you can't
-     */
-    public boolean attachLocomotive(Locomotive locomotive) {
-        if (getTrainCarQuantity() == 0) {
-            if (getLocomotiveQuantity() == 0) {
-                composition.add(locomotive);
-                maxWeightTrainCanPull = locomotive.getMaxWeight();
-                maxTrainCarsTrainCanPull = locomotive.getMaxQuantityTrainCar();
-                return true;
-            } else {
-                composition.add(locomotive);
-                setMaxWeightTrainCanPull();
-                return true;
-            }
+        if (getComposition() == 0 && v instanceof Locomotive l) {
+            composition.add(l);
+            maxWeightTrainCanPull = l.getMaxWeight();
+            maxTrainCarsTrainCanPull = l.getMaxQuantityTrainCar();
         } else {
-            return false;
+            composition.add(v);
+            setMaxWeightTrainCanPull();
         }
+        return true;
     }
 
-    /**
-     * It attaches a train car to a train.
-     * @param trainCar the train car to be attached
-     * @return true if you can attach the train car; false if you can't
-     */
-    public boolean attachTrainCar(TrainCar trainCar) {
+    public boolean addTrainCar(Vehicle v) {
         double maxWeight = 0.0;
         for (Vehicle vehicle : composition) {
             if (vehicle instanceof TrainCar vehicleTrainCar)
-            maxWeight += vehicleTrainCar.getLoadCapacity();
+                maxWeight += vehicleTrainCar.getLoadCapacity();
         }
-        maxWeight += trainCar.getLoadCapacity();
 
-        if (getTrainCarQuantity() < maxTrainCarsTrainCanPull && !(maxWeight > maxWeightTrainCanPull)) {
-            composition.add(trainCar);
+        int count = 0;
+
+        for (Vehicle vehicle : composition) {
+            if (v instanceof TrainCar tc)
+                count++;
+        }
+
+        if (count <= maxTrainCarsTrainCanPull && !(maxWeight > maxWeightTrainCanPull)) {
+            composition.add(v);
             return true;
         } else {
             return false;
         }
     }
 
-    /**
-     * It detaches a locomotive.
-     * @return true if you can detach the locomotive; false if you can't
-     */
-    public boolean detachLocomotive() {
-        if (getTrainCarQuantity() == 0) {
-            if (getTrainCarQuantity() == 0) {
-                return false;
-            } else {
-                composition.remove(composition.size() - 1);
-                return true;
-            }
-        } else {
-         return false;
-        }
+    public int getComposition() {
+        return composition.size();
     }
 
-    /**
-     * It detaches a train car.
-     * @return true if you can't detach; false if you can't
-     */
-    public boolean detachTrainCar() {
-        if (getTrainCarQuantity() == 0) {
-            return false;
-        } else {
-            composition.remove(composition.size() - 1);
-            return true;
-        }
-    }
-
-    /**
-     * It gets the last locomotive attached to a train.
-     * @param train the train you want to get the locomotive from
-     * @return the locomotive
-     */
-    public Locomotive getLastLocomotiveFromTrain(Train train) {
-        Vehicle vehicle = composition.get(getLocomotiveQuantity() - 1);
-        if (vehicle instanceof Locomotive locomotive)
-            return locomotive;
-        else
+    public Vehicle getLastElement() {
+        if (getComposition() == 0) {
             return null;
+        }
+        return composition.get(composition.size() - 1);
     }
 
-    /** It gets the last train car attached to a train.
-     * @param train the train you want to get the train car from
-     * @return the train car
-     */
-    public TrainCar getLastTrainCarFromTrain(Train train) {
-        TrainCar trainCar = null;
-
-        for (Vehicle vehicle: composition){
-            if (vehicle instanceof TrainCar)
-                trainCar = (TrainCar) vehicle;
-        }
-
-        return trainCar;
+    public void removeVehicle(Vehicle v) {
+        composition.remove(v);
+        setMaxWeightTrainCanPull();
     }
 
     /**
@@ -164,7 +81,7 @@ public class Train {
         int trainCars = 0;
         double tx = 0.9;
         for (Vehicle vehicle : composition) {
-            if (composition instanceof Locomotive locomotive) {
+            if (vehicle instanceof Locomotive locomotive) {
                 weight += locomotive.getMaxWeight();
                 trainCars += locomotive.getMaxQuantityTrainCar();
             }
