@@ -6,6 +6,7 @@ public class TrainMain {
         for (int i = 1; i <= 10; i++) {
             g.addVehicle(new Locomotive(200 + i, 500, 2));
             g.addVehicle(new TrainCar(300 + i, 250));
+            g.addVehicle(new PassengerTrain(400 + i, 215));
         }
 
         Scanner sc = new Scanner(System.in);
@@ -55,15 +56,17 @@ public class TrainMain {
 
                     do {
                         System.out.print("(1) add a locomotive, (2) add a train car, " +
-                                "(3) remove the last train element, (4) list all free locomotives, " +
-                                "(5) list all free train cars, and (6) go back to main menu. " +
+                                "(3) add a passenger train, " +
+                                "(4) remove the last train element, (5) list all free locomotives, " +
+                                "(6) list all free train cars, (7) list all passenger trains " +
+                                "and (8) go back to main menu. " +
                                 "Choose one: ");
                         input = sc.nextInt();
 
                         switch (input) {
                             case 1:
-                                if (t.getLastElement() instanceof TrainCar) {
-                                    System.out.println("You can't add a locomotive to a train car.");
+                                if (t.getLastElement() instanceof WeightTrain) {
+                                    System.out.println("You can't add a locomotive to a train car or passenger train.");
                                     break;
                                 }
 
@@ -98,6 +101,23 @@ public class TrainMain {
                                 break;
 
                             case 3:
+                                System.out.print("Enter the passenger train ID to be attached to the selected train: ");
+                                input = sc.nextInt();
+
+                                if (g.hasVehicleInGarage(input)) {
+                                    Vehicle v = g.getById(input);
+                                    if (t.addPassagersTrain(v)) {
+                                        g.removeFromGarage(input);
+                                        System.out.println("Passenger Train added.");
+                                    } else {
+                                        System.out.println("Oh no!");
+                                    }
+                                } else {
+                                    System.out.println("Invalid passenger train ID or there's no such passenger train in garage.");
+                                }
+                                break;
+
+                            case 4:
                                 if (t.getComposition() == 1) {
                                     System.out.println("You can't remove the only element remaining in the train.");
                                     break;
@@ -109,18 +129,18 @@ public class TrainMain {
                                 }
                                 break;
 
-                            case 4:
+                            case 5:
                                 System.out.println(g.listLocomotives());
                                 break;
 
-                            case 5:
+                            case 6:
                                 System.out.println(g.listTrainCars());
                                 break;
-
-                            case 6:
+                            case 7:
+                                System.out.println(g.listPassengerTrain());
                                 break;
                         }
-                    } while (input != 6);
+                    } while (input != 8);
                     break;
 
                 case 3:

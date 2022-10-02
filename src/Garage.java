@@ -124,6 +124,16 @@ public class Garage {
         return aux;
     }
 
+    public String listPassengerTrain() {
+        String aux = "Passenger Trains in garage:\n\n";
+        for (Vehicle v : vehicles) {
+            if (v instanceof PassengerTrain) {
+                aux += v + "\n";
+            }
+        }
+        return aux;
+    }
+
     @Override
     public String toString() {
         String aux = "Vehicles in garage:\n\n";

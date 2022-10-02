@@ -1,4 +1,4 @@
-public class TrainCar extends Vehicle{
+public class TrainCar extends Vehicle implements WeightTrain{
     private double loadCapacity;
     private Train train;
     
@@ -14,7 +14,8 @@ public class TrainCar extends Vehicle{
      * It gets the load capacity of a train car.
      * @return the load capacity
      */
-    public double getLoadCapacity() {
+    @Override
+    public double getWeight() {
         return loadCapacity;
     }
 

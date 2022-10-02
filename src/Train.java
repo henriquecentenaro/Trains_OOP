@@ -28,28 +28,26 @@ public class Train {
             composition.add(l);
             maxWeightTrainCanPull = l.getMaxWeight();
             maxTrainCarsTrainCanPull = l.getMaxQuantityTrainCar();
-        } else {
-            composition.add(v);
+            return true;
+        } else if (v instanceof Locomotive l) {
+            composition.add(l);
             setMaxWeightTrainCanPull();
+            return true;
         }
-        return true;
+        return false;
     }
 
     public boolean addTrainCar(Vehicle v) {
-        double maxWeight = 0.0;
-        for (Vehicle vehicle : composition) {
-            if (vehicle instanceof TrainCar vehicleTrainCar)
-                maxWeight += vehicleTrainCar.getLoadCapacity();
+        if (isTrainOverloaded() && !(isTrainOverweigth(v))) {
+            composition.add(v);
+            return true;
+        } else {
+            return false;
         }
+    }
 
-        int count = 0;
-
-        for (Vehicle vehicle : composition) {
-            if (v instanceof TrainCar tc)
-                count++;
-        }
-
-        if (count <= maxTrainCarsTrainCanPull && !(maxWeight > maxWeightTrainCanPull)) {
+    public boolean addPassagersTrain(Vehicle v) {
+        if (isTrainOverloaded() && !(isTrainOverweigth(v))) {
             composition.add(v);
             return true;
         } else {
@@ -88,6 +86,27 @@ public class Train {
         }
         maxWeightTrainCanPull = weight * tx;
         maxTrainCarsTrainCanPull = trainCars - (10 * trainCars / 100);
+    }
+
+    private boolean isTrainOverweigth(Vehicle v) {
+        double maxWeight = 0.0;
+        for (Vehicle vehicle : composition) {
+            if (vehicle instanceof WeightTrain weightTrain)
+                maxWeight += weightTrain.getWeight();
+        }
+
+        return maxWeight > maxWeightTrainCanPull;
+    }
+
+    private boolean isTrainOverloaded() {
+        int count = 0;
+
+        for (Vehicle vehicle : composition) {
+            if (vehicle instanceof WeightTrain)
+                count++;
+        }
+
+        return count <= maxTrainCarsTrainCanPull;
     }
 
     @Override
